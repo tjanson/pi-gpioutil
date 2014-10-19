@@ -42,9 +42,22 @@ function gpioExec(command, params, callback) {
     });
 }
 
+function parseWarning(cmd) {
+    console.error("WARNING [gpioUtil] unexpected result from '" + cmd + "'");
+}
+
 var gpioUtil = {
     version: function(callback) {
-        gpioExec("-v", [], callback);
+        gpioExec("-v", [], function(err, stdout, stderr) {
+            var versionMatch = /gpio version: (.*)/.exec(stdout);
+            // version number is substring match -> stored in vM[1]
+
+            if (versionMatch.length !== 2) {
+                parseWarning("version");
+            }
+
+            (callback || function noop(){})(err, stdout, stderr, versionMatch[1]);
+        });
     },
 
     mode: function(pin, mode, callback) {
@@ -68,14 +81,73 @@ var gpioUtil = {
             } else if (stdout === '1\n') {
                 val = true;
             } else {
-                console.error("WARNING [gpioUtil] unexpected result from 'read'");
+                parseWarning("read pin " + pin);
             }
-            callback(val);
+            callback(err, stdout, stderr, val);
         });
     },
 
     readall: function(callback) {
-        gpioExec("readall", [], callback);
+        gpioExec("readall", [], function(err, stdout, stderr) {
+            var header = stdout.split('\n')[1];
+            const headerStandard = "| wiringPi | GPIO | Phys | Name   | Mode | Value |";
+            const headerBPlus = " | BCM | wPi |   Name  | Mode | V | Physical | V | Mode | Name    | wPi | BCM |";
+
+            var lines = stdout.split('\n').slice(3, -3);
+
+            var format;
+            switch (header) {
+                case headerStandard:
+                    format = 'standard';
+                    break;
+                case headerBPlus:
+                    format = 'bplus';
+                    lines.pop(); // extra empty-line
+                    break;
+                default:
+                    parseWarning("readall (unknown format)");
+                    (callback || function noop(){})(err, stdout, stderr);
+            }
+
+            var pins = [];
+            lines.forEach(function(line) {
+                var tokens = [];
+                line.split('|').slice(1, -1).forEach(function(token) {
+                    tokens.push(token.trim());
+                });
+
+                if (format === 'standard') {
+                    if (tokens.length !== 6) {
+                        parseWarning("readall (line: '" + line + "')");
+                    } else {
+                        pins.push({ 'wiring': tokens[0],
+                                    'bcm':    tokens[1],
+                                    'phys':   tokens[2],
+                                    'name':   tokens[3],
+                                    'mode':   tokens[4],
+                                    'value':  tokens[5] });
+                    }
+                } else if (format === 'bplus') {
+                    if (tokens.length !== 13) {
+                        parseWarning("readall (line: '" + line + "')");
+                    } else {
+                        pins.push({ 'wiring': tokens[1],
+                                    'bcm':    tokens[0],
+                                    'phys':   tokens[5],
+                                    'name':   tokens[2],
+                                    'mode':   tokens[3],
+                                    'value':  tokens[4] });
+                        pins.push({ 'wiring': tokens[7 + 4],
+                                    'bcm':    tokens[7 + 5],
+                                    'phys':   tokens[7 + 0],
+                                    'name':   tokens[7 + 3],
+                                    'mode':   tokens[7 + 2],
+                                    'value':  tokens[7 + 1] });
+                    }
+                }
+            });
+            (callback || function noop(){})(err, stdout, stderr, pins);
+        });
     },
 
     export: function(pin, inout, callback) {
@@ -91,7 +163,24 @@ var gpioUtil = {
     },
 
     exports: function(callback) {
-        gpioExec("exports", [], callback);
+        gpioExec("exports", [], function(err, stdout, stderr) {
+            var lines = stdout.split('\n').slice(1);
+            var exports = [];
+            const lineRegex = /([0-9]{1,2}):\s(in|out)\s+(\w)\s+(\w+)/;
+
+            lines.forEach(function(line) {
+                var tokens = lineRegex.exec(line);
+                if (tokens.length !== 5) {
+                    parseWarning("exports (line: '" + line + "')");
+                } else {
+                    exports.push({ 'pin':       tokens[1],
+                                   'direction': tokens[2],
+                                   'value':     tokens[3],
+                                   'pull':      tokens[4] });
+                }
+            });
+            (callback || function noop(){})(err, stdout, stderr, exports);
+        });
     },
 
     edge: function(pin, edge, callback) {
