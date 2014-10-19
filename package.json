@@ -1,0 +1,27 @@
+{
+  "name": "pi-gpioUtil",
+  "version": "0.0.1",
+  "description": "A Node wrapper for Wiring Pi's gpio utility.",
+  "main": "gpioUtil.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:tjanson/pi-gpioUtil.git"
+  },
+  "keywords": [
+    "raspberrypi",
+    "raspberry",
+    "pi",
+    "gpio",
+    "wiringpi",
+    "wiring"
+  ],
+  "author": "Tom Janson",
+  "license": "LGPL-3.0+",
+  "bugs": {
+    "url": "https://github.com/tjanson/pi-gpioUtil/issues"
+  },
+  "homepage": "https://github.com/tjanson/pi-gpioUtil"
+}
