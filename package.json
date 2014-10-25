@@ -3,8 +3,12 @@
   "version": "0.0.1",
   "description": "A Node wrapper for Wiring Pi's gpio utility.",
   "main": "gpioUtil.js",
+  "devDependencies": {
+    "mocha": "2.x",
+    "should": "4.x"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --reporter spec"
   },
   "repository": {
     "type": "git",
@@ -18,7 +22,7 @@
     "wiringpi",
     "wiring"
   ],
-  "author": "Tom Janson",
+  "author": "Tom Janson <priv.tom.janson+gpioutil@gmail.com>",
   "license": "LGPL-3.0+",
   "bugs": {
     "url": "https://github.com/tjanson/pi-gpioUtil/issues"
