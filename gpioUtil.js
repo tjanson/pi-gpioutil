@@ -2,6 +2,8 @@ var fs   = require("fs"),
     path = require("path"),
     exec = require("child_process").exec;
 
+var readallParser = require("./readallParser.js");
+
 // name/path of Wiring Pi gpio utility, see
 // http://wiringpi.com/download-and-install/
 // and http://wiringpi.com/the-gpio-utility/
@@ -89,63 +91,7 @@ var gpioUtil = {
 
     readall: function(callback) {
         gpioExec("readall", [], function(err, stdout, stderr) {
-            var header = stdout.split('\n')[1];
-            const headerStandard = "| wiringPi | GPIO | Phys | Name   | Mode | Value |";
-            const headerBPlus = " | BCM | wPi |   Name  | Mode | V | Physical | V | Mode | Name    | wPi | BCM |";
-
-            var lines = stdout.split('\n').slice(3, -3);
-
-            var format;
-            switch (header) {
-                case headerStandard:
-                    format = 'standard';
-                    break;
-                case headerBPlus:
-                    format = 'bplus';
-                    lines.pop(); // extra empty-line
-                    break;
-                default:
-                    parseWarning("readall (unknown format)");
-                    (callback || function noop(){})(err, stdout, stderr);
-            }
-
-            var pins = [];
-            lines.forEach(function(line) {
-                var tokens = [];
-                line.split('|').slice(1, -1).forEach(function(token) {
-                    tokens.push(token.trim());
-                });
-
-                if (format === 'standard') {
-                    if (tokens.length !== 6) {
-                        parseWarning("readall (line: '" + line + "')");
-                    } else {
-                        pins.push({ 'wiring': tokens[0],
-                                    'bcm':    tokens[1],
-                                    'phys':   tokens[2],
-                                    'name':   tokens[3],
-                                    'mode':   tokens[4],
-                                    'value':  tokens[5] });
-                    }
-                } else if (format === 'bplus') {
-                    if (tokens.length !== 13) {
-                        parseWarning("readall (line: '" + line + "')");
-                    } else {
-                        pins.push({ 'wiring': tokens[1],
-                                    'bcm':    tokens[0],
-                                    'phys':   tokens[5],
-                                    'name':   tokens[2],
-                                    'mode':   tokens[3],
-                                    'value':  tokens[4] });
-                        pins.push({ 'wiring': tokens[7 + 4],
-                                    'bcm':    tokens[7 + 5],
-                                    'phys':   tokens[7 + 0],
-                                    'name':   tokens[7 + 3],
-                                    'mode':   tokens[7 + 2],
-                                    'value':  tokens[7 + 1] });
-                    }
-                }
-            });
+            var pins = readallParser.parse(stdout);
             (callback || function noop(){})(err, stdout, stderr, pins);
         });
     },

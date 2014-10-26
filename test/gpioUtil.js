@@ -101,11 +101,11 @@ describe('pi-gpioUtil', function() {
           pins.length.should.be.within(16, 40);
 
           function isTestPin(pin) {
-            return pin.bcm == testPin;
+            return pin.bcm === testPin;
           }
           var tp = pins.filter(isTestPin);
           tp.should.not.be.empty;
-          tp[0].value.should.equal('High');
+          tp[0].value.should.equal(true);
 	  done();
         });
       });
