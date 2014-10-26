@@ -1,6 +1,6 @@
 {
-  "name": "pi-gpioUtil",
-  "version": "0.0.1",
+  "name": "pi-gpioutil",
+  "version": "0.0.2",
   "description": "A Node wrapper for Wiring Pi's gpio utility.",
   "main": "gpioUtil.js",
   "devDependencies": {
@@ -8,7 +8,7 @@
     "should": "4.x"
   },
   "scripts": {
-    "test": "mocha --harmony --reporter spec"
+    "test": "mocha --reporter spec"
   },
   "repository": {
     "type": "git",
