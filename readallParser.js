@@ -26,9 +26,11 @@ function tokenize(line) {
 function parsePin(wiring, bcm, phys, name, mode, value) {
     function highLowToBool(string) {
         switch(string.toLowerCase()) {
+            case '1':
             case 'high':
                 return true;
                 break;
+            case '0':
             case 'low':
                 return false;
                 break;
@@ -43,7 +45,7 @@ function parsePin(wiring, bcm, phys, name, mode, value) {
         'bcm':    parseInt(bcm),
         'phys':   parseInt(phys),
         'name':   name,
-        'mode':   mode,
+        'mode':   mode.toLowerCase,
         'value':  highLowToBool(value)
     };
     return pinObj;
