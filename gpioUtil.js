@@ -67,6 +67,7 @@ var gpioUtil = {
     },
 
     write: function(pin, onoff, callback) {
+        if (typeof onoff === 'boolean') onoff = onoff ? 1 : 0;
         gpioExec("write", [['pin', pin], ['onoff', onoff]], callback);
     },
 
