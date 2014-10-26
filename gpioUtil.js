@@ -111,13 +111,13 @@ var gpioUtil = {
 
     exports: function(callback) {
         gpioExec("exports", [], function(err, stdout, stderr) {
-            var lines = stdout.split('\n').slice(1);
+            var lines = stdout.split('\n').slice(1, -1);
             var exports = [];
             const lineRegex = /([0-9]{1,2}):\s(in|out)\s+(\w)\s+(\w+)/;
 
             lines.forEach(function(line) {
                 var tokens = lineRegex.exec(line);
-                if (tokens.length !== 5) {
+                if (tokens === null || tokens.length !== 5) {
                     parseWarning("exports (line: '" + line + "')");
                 } else {
                     exports.push({ 'pin':       tokens[1],
