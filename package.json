@@ -8,7 +8,7 @@
     "should": "4.x"
   },
   "scripts": {
-    "test": "mocha --reporter spec"
+    "test": "mocha --harmony --reporter spec"
   },
   "repository": {
     "type": "git",
