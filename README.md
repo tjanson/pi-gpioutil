@@ -34,7 +34,7 @@ Usage
 Here’s a simple example of how `gpioUtil` might be used:
 
 ```javascript
-var gpioUtil = require('pi-gpioUtil');
+var gpioUtil = require('pi-gpioutil');
 var pinBcm = 17; // BCM numbering
 var pinWiring = 0; // Wiring Pi numbering (yes, this is confusing)
 gpioUtil.export(pinBcm, 'in', function(err) {
