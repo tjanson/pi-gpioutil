@@ -1,6 +1,6 @@
 {
   "name": "pi-gpioutil",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A Node wrapper for Wiring Pi's gpio utility.",
   "main": "gpioUtil.js",
   "devDependencies": {
