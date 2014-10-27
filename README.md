@@ -79,10 +79,10 @@ Pin numbers are in Wiring Pi format if not noted otherwise.
 * [`exports(callback)`][exs]: fourth argument to callback: JSON representation of exported pins
 * [`version(callback)`][ver]: fourth argument to callback: version string (e.g., `'2.13'`)
 
-[exp]: https://github.com/tjanson/pi-gpioUtil/blob/master/gpioUtil.js#L100
-[une]: https://github.com/tjanson/pi-gpioUtil/blob/master/gpioUtil.js#L104
-[rea]: https://github.com/tjanson/pi-gpioUtil/blob/master/gpioUtil.js#L78
+[exp]: https://github.com/tjanson/pi-gpioUtil/blob/master/gpioUtil.js#L99
+[une]: https://github.com/tjanson/pi-gpioUtil/blob/master/gpioUtil.js#L103
+[rea]: https://github.com/tjanson/pi-gpioUtil/blob/master/gpioUtil.js#L77
 [wri]: https://github.com/tjanson/pi-gpioUtil/blob/master/gpioUtil.js#L69
-[all]: https://github.com/tjanson/pi-gpioUtil/blob/master/gpioUtil.js#L93
-[exs]: https://github.com/tjanson/pi-gpioUtil/blob/master/gpioUtil.js#L112
+[all]: https://github.com/tjanson/pi-gpioUtil/blob/master/gpioUtil.js#L92
+[exs]: https://github.com/tjanson/pi-gpioUtil/blob/master/gpioUtil.js#L111
 [ver]: https://github.com/tjanson/pi-gpioUtil/blob/master/gpioUtil.js#L52

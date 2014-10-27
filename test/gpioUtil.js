@@ -73,25 +73,27 @@ describe('pi-gpioUtil', function() {
     });
   });
 
-  describe('hooks', function() {
-    beforeEach('export testPin and write 1', function(done) {
-      gpioUtil.export(testPin, 'out', function(err) {
-        gpioUtil.write(testPinWPi, 1, done);
+  [1, 0].forEach(function(onoff) {
+    describe('hooks', function() {
+      beforeEach('export testPin and write ' + onoff, function(done) {
+        gpioUtil.export(testPin, 'out', function(err) {
+          gpioUtil.write(testPinWPi, onoff, done);
+        });
       });
-    });
 
-    describe('.read()', function() {
-      it('should read `true` on a pin set to 1', function(done) {
-        gpioUtil.read(testPinWPi, function(err, stdout, stderr, val) {
-          should.not.exist(err);
-          val.should.equal(true);
-          done();
+      describe('.read()', function() {
+        it('should read ' + (onoff === 1 ? 'true' : 'false') + ' on a pin set to' + onoff, function(done) {
+          gpioUtil.read(testPinWPi, function(err, stdout, stderr, val) {
+            should.not.exist(err);
+            val.should.equal((onoff === 1 ? true : false));
+            done();
+          });
         });
       });
     });
 
     describe('.readall()', function() {
-      it('should return an array of 16 to 40 pins with testPin high', function(done) {
+      it('should return an array of 16 to 40 pins with testPin ' + onoff, function(done) {
         gpioUtil.readall(function(err, stdout, stderr, pins) {
           should.not.exist(err);
 
@@ -105,8 +107,8 @@ describe('pi-gpioUtil', function() {
           }
           var tp = pins.filter(isTestPin);
           tp.should.not.be.empty;
-          tp[0].value.should.equal(true);
-	  done();
+          tp[0].value.should.equal(onoff === 1 ? true : false);
+          done();
         });
       });
     });

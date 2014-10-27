@@ -73,15 +73,14 @@ var gpioUtil = {
 
     pwm: function(pin, pwmVal, callback) {
         gpioExec("pwm", [['pin', pin], ['pwmVal', pwmVal]], callback);
-
     },
 
     read: function(pin, callback) {
         gpioExec("read", [['pin', pin]], function(err, stdout, stderr) {
             var val;
-            if (stdout === '0\n') {
+            if (stdout.trim() === '0') {
                 val = false;
-            } else if (stdout === '1\n') {
+            } else if (stdout.trim() === '1') {
                 val = true;
             } else {
                 parseWarning("read pin " + pin);
