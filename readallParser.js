@@ -45,7 +45,7 @@ function parsePin(wiring, bcm, phys, name, mode, value) {
         'bcm':    parseInt(bcm),
         'phys':   parseInt(phys),
         'name':   name,
-        'mode':   mode.toLowerCase,
+        'mode':   mode.toLowerCase(),
         'value':  highLowToBool(value)
     };
     return pinObj;
